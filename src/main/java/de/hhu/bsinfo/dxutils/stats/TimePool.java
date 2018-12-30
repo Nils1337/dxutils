@@ -55,8 +55,8 @@ public class TimePool extends AbstractOperation {
     /**
      * Stop time measurement
      */
-    public void stop() {
-        getThreadLocalTime().stop();
+    public long stop() {
+        return getThreadLocalTime().stop();
     }
 
     /**
