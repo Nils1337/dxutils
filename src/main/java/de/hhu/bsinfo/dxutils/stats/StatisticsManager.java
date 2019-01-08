@@ -243,11 +243,19 @@ public final class StatisticsManager extends Thread {
         printStatisticTablesOf(builder, Throughput.class);
         builder.append("\n\n");
 
+        builder.append(">>> ThroughputPool\n");
+        printStatisticTablesOf(builder, Throughput.class);
+        builder.append("\n\n");
+
         builder.append(">>> Ratio\n");
         printStatisticTablesOf(builder, Ratio.class);
         builder.append('\n');
 
         builder.append(">>> TimePercentile\n");
+        printStatisticTablesOf(builder, TimePercentile.class);
+        builder.append('\n');
+
+        builder.append(">>> TimePercentilePool\n");
         printStatisticTablesOf(builder, TimePercentile.class);
         builder.append('\n');
 
