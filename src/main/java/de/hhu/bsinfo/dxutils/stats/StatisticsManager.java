@@ -244,7 +244,7 @@ public final class StatisticsManager extends Thread {
         builder.append("\n\n");
 
         builder.append(">>> ThroughputPool\n");
-        printStatisticTablesOf(builder, Throughput.class);
+        printStatisticTablesOf(builder, ThroughputPool.class);
         builder.append("\n\n");
 
         builder.append(">>> Ratio\n");
@@ -256,7 +256,7 @@ public final class StatisticsManager extends Thread {
         builder.append('\n');
 
         builder.append(">>> TimePercentilePool\n");
-        printStatisticTablesOf(builder, TimePercentile.class);
+        printStatisticTablesOf(builder, TimePercentilePool.class);
         builder.append('\n');
 
         m_opsLock.unlock();
