@@ -269,7 +269,7 @@ public final class StatisticsManager extends Thread {
 
     @Override
     public void run() {
-        while (true) {
+        while (!Thread.interrupted()) {
             if (m_printIntervalMs > 0) {
                 printStatistics(System.out);
 
