@@ -55,6 +55,16 @@ public class RandomAccessFileImExporter implements Importer, Exporter {
     }
 
     /**
+     * Constructor
+     *
+     * @param p_file
+     *         File to use
+     */
+    public RandomAccessFileImExporter(final RandomAccessFile p_file) {
+        m_file = p_file;
+    }
+
+    /**
      * Close the backend flushing all buffers
      */
     public void close() {
