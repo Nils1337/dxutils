@@ -268,7 +268,7 @@ public final class StatisticsManager extends Thread {
                 try {
                     Thread.sleep(m_printIntervalMs);
                 } catch (InterruptedException ignored) {
-
+                    break;
                 }
             } else {
                 m_lock.lock();
@@ -276,7 +276,7 @@ public final class StatisticsManager extends Thread {
                 try {
                     m_condition.await();
                 } catch (InterruptedException ignored) {
-
+                    break;
                 } finally {
                     m_lock.unlock();
                 }
