@@ -184,10 +184,10 @@ public class TimePercentile extends AbstractOperation {
         if (p_extended) {
             sortValues();
 
-            return m_time.dataToString(p_indent, p_extended) + ";95th percentile max" +
-                    Time.formatTime(getPercentileScore(0.95f)) + ";99th percentile max" +
-                    Time.formatTime(getPercentileScore(0.99f)) + ";99.9th percentile max" +
-                    Time.formatTime(getPercentileScore(0.999f)) + ";99.99th percentile max" +
+            return m_time.dataToString(p_indent, p_extended) + ";95th percentile max " +
+                    Time.formatTime(getPercentileScore(0.95f)) + ";99th percentile max " +
+                    Time.formatTime(getPercentileScore(0.99f)) + ";99.9th percentile max " +
+                    Time.formatTime(getPercentileScore(0.999f)) + ";99.99th percentile max " +
                     Time.formatTime(getPercentileScore(0.9999f));
         } else {
             // don't print percentile for debug output because sorting might take too long if there are too many values

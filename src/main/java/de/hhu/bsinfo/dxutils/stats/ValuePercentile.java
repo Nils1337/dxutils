@@ -136,10 +136,10 @@ public class ValuePercentile extends AbstractOperation {
         if (p_extended) {
             sortValues();
 
-            return "95th percentile max" + getPercentileScore(0.95f)
-                    + ";99th percentile max" + getPercentileScore(0.99f)
-                    + ";99.9th percentile max" + getPercentileScore(0.999f)
-                    + ";99.99th percentile max" + getPercentileScore(0.9999f);
+            return "95th percentile max " + getPercentileScore(0.95f)
+                    + ";99th percentile max " + getPercentileScore(0.99f)
+                    + ";99.9th percentile max " + getPercentileScore(0.999f)
+                    + ";99.99th percentile max " + getPercentileScore(0.9999f);
 
         } else {
             // don't print percentile for debug output because sorting might take too long if there are too many values
