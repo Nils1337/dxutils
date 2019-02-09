@@ -40,6 +40,8 @@ public final class StatisticsManager extends Thread {
     private ReentrantLock m_opsLock = new ReentrantLock(false);
     private Map<Class<?>, ArrayList<AbstractOperation>> m_operationsByClasses = new HashMap<>();
 
+    private volatile boolean m_extended = false;
+
     /**
      * Get the StatisticsManager singleton
      */
@@ -49,6 +51,10 @@ public final class StatisticsManager extends Thread {
         }
 
         return ms_instance;
+    }
+
+    public void setExtended(boolean p_extended) {
+        m_extended = p_extended;
     }
 
     /**
@@ -271,7 +277,7 @@ public final class StatisticsManager extends Thread {
     public void run() {
         while (!Thread.interrupted()) {
             if (m_printIntervalMs > 0) {
-                printStatistics(System.out);
+                printStatistics(System.out, m_extended);
 
                 try {
                     Thread.sleep(m_printIntervalMs);

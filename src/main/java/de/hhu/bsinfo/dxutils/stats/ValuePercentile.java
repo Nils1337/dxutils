@@ -72,6 +72,18 @@ public class ValuePercentile extends AbstractOperation {
      * @return Score of specified percentile
      */
     public long getPercentileScore(final float p_percentile) {
+        return getPercentileScore(p_percentile, true);
+    }
+
+    /**
+     * Get the score for the Xth percentile of all recorded values
+     *
+     * @param p_percentile
+     *         the percentile
+     * @param p_max max percentile or min percentile
+     * @return Score of specified percentile
+     */
+    public long getPercentileScore(final float p_percentile, final boolean p_max) {
         if (p_percentile <= 0.0 || p_percentile >= 1.0) {
             throw new IllegalArgumentException("Percentile must be in (0.0, 1.0)!");
         }
@@ -81,9 +93,15 @@ public class ValuePercentile extends AbstractOperation {
         }
 
         int size = (m_slots.size() - 1) * SLOT_SIZE + m_index;
-        long index = (long) Math.ceil(p_percentile * size) - 1;
 
+        long index;
+        if (p_max) {
+            index = (long) Math.ceil(p_percentile * size) - 1;
+        } else {
+            index = (long) Math.floor((1 - p_percentile) * size);
+        }
         return m_slots.get((int) (index / SLOT_SIZE))[(int) (index % SLOT_SIZE)];
+
     }
 
     /**
@@ -118,8 +136,11 @@ public class ValuePercentile extends AbstractOperation {
         if (p_extended) {
             sortValues();
 
-            return "95th percentile " + getPercentileScore(0.95f) + ";99th percentile " + getPercentileScore(0.99f) +
-                    ";99.9th percentile " + getPercentileScore(0.999f);
+            return "95th percentile max" + getPercentileScore(0.95f)
+                    + ";99th percentile max" + getPercentileScore(0.99f)
+                    + ";99.9th percentile max" + getPercentileScore(0.999f)
+                    + ";99.99th percentile max" + getPercentileScore(0.9999f);
+
         } else {
             // don't print percentile for debug output because sorting might take too long if there are too many values
             return "*** Suppressed to avoid performance penalties ***";
@@ -128,15 +149,28 @@ public class ValuePercentile extends AbstractOperation {
 
     @Override
     public String generateCSVHeader(final char p_delim) {
-        return "95th percentile" + p_delim + "99th percentile" + p_delim + "99.9th percentile";
+        return "95th percentile max" + p_delim
+                + "95th percentile min" + p_delim
+                + "99th percentile max" + p_delim
+                + "99th percentile min" + p_delim
+                + "99.9th percentile max" + p_delim
+                + "99.9th percentile min" + p_delim
+                + "99.99th percentile max" + p_delim
+                + "99.99th percentile min";
     }
 
     @Override
     public String toCSV(final char p_delim) {
         sortValues();
 
-        return Long.toString(getPercentileScore(0.95f)) + p_delim + getPercentileScore(0.99f) + p_delim +
-                getPercentileScore(0.999f);
+        return Long.toString(getPercentileScore(0.95f)) + p_delim
+                + getPercentileScore(0.95f, false) + p_delim
+                + getPercentileScore(0.99f) + p_delim
+                + getPercentileScore(0.99f, false) + p_delim
+                + getPercentileScore(0.999f) + p_delim
+                + getPercentileScore(0.999f, false)
+                + getPercentileScore(0.9999f) + p_delim
+                + getPercentileScore(0.9999f, false);
     }
 
     /**

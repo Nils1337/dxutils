@@ -90,6 +90,19 @@ public class Time extends AbstractOperation {
         return delta;
     }
 
+    public void add(long p_value) {
+        m_total += p_value;
+        m_counter++;
+
+        if (p_value < m_best) {
+            m_best = p_value;
+        }
+
+        if (p_value > m_worst) {
+            m_worst = p_value;
+        }
+    }
+
     /**
      * "Debug version". Identical to normal call but is removed on non-debug builds.
      */
@@ -160,7 +173,7 @@ public class Time extends AbstractOperation {
      *
      * @return Best time in ns
      */
-    public double getBestTime() {
+    public long getBestTime() {
         return m_best;
     }
 
@@ -180,7 +193,7 @@ public class Time extends AbstractOperation {
      *
      * @return Worst time in ns
      */
-    public double getWorstTime() {
+    public long getWorstTime() {
         return m_worst;
     }
 

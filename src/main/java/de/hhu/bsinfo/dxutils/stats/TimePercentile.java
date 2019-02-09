@@ -24,7 +24,7 @@ package de.hhu.bsinfo.dxutils.stats;
  */
 public class TimePercentile extends AbstractOperation {
     ValuePercentile m_percentile;
-    Value m_value;
+    Time m_time;
 
     /**
      * Constructor
@@ -38,7 +38,7 @@ public class TimePercentile extends AbstractOperation {
         super(p_class, p_name);
 
         m_percentile = new ValuePercentile(p_class, p_name);
-        m_value = new Value(p_class, p_name);
+        m_time = new Time(p_class, p_name);
     }
 
     /**
@@ -47,86 +47,86 @@ public class TimePercentile extends AbstractOperation {
      * @return Counter value
      */
     public long getCounter() {
-        return m_value.getCounter();
+        return m_time.getCounter();
     }
 
     /**
-     * Get the total value
+     * Get the total time
      *
-     * @return Total value
+     * @return Total time
      */
-    public long getTotalValue() {
-        return m_value.getTotalValue();
+    public long getTotalTime() {
+        return m_time.getTotalTime();
     }
 
     /**
-     * Get the total value
+     * Get the total time
      *
      * @param p_prefix
      *          Prefix to apply
-     * @return Total value
+     * @return Total time
      */
-    public double getTotalValue(final Time.Prefix p_prefix) {
-        return m_value.getTotalValue() / Time.MS_PREFIX_TABLE[p_prefix.ordinal()];
+    public double getTotalTime(final Time.Prefix p_prefix) {
+        return m_time.getTotalTime() / Time.MS_PREFIX_TABLE[p_prefix.ordinal()];
     }
 
     /**
-     * Get the average value
+     * Get the average time
      *
-     * @return Average value
+     * @return Average time
      */
     public long getAvg() {
-        return (long) m_value.getAvgValue();
+        return (long) m_time.getAvgTime();
     }
 
     /**
-     * Get the average value
+     * Get the average time
      *
      * @param p_prefix
      *         Prefix to apply
      */
     public double getAvg(final Time.Prefix p_prefix) {
-        return m_value.getAvgValue() / Time.MS_PREFIX_TABLE[p_prefix.ordinal()];
+        return m_time.getAvgTime(p_prefix);
     }
 
     /**
-     * Get the min value
+     * Get the worst time
      *
-     * @return Min value
+     * @return worst value
      */
-    public long getMin() {
-        return m_value.getMinValue();
+    public long getWorstTime() {
+        return m_time.getWorstTime();
     }
 
     /**
-     * Get the min value
+     * Get the worst time
      *
      * @param p_prefix
      *         Prefix to apply
-     * @return Min value scaled to specified prefix
+     * @return worst time scaled to specified prefix
      */
-    public double getMin(final Time.Prefix p_prefix) {
-        return m_value.getMinValue() / Time.MS_PREFIX_TABLE[p_prefix.ordinal()];
+    public double getWorstTime(final Time.Prefix p_prefix) {
+        return m_time.getWorstTime(p_prefix);
     }
 
     /**
-     * Get the max value
+     * Get the best time
      *
-     * @return Max value
+     * @return best time
      */
-    public long getMax() {
-        return m_value.getMaxValue();
+    public long getBestTime() {
+        return m_time.getBestTime();
     }
 
     /**
-     * Get the max value
+     * Get the best time
      *
      * @param p_prefix
      *         Prefix to apply
-     * @return Max value scaled to specified prefix
+     * @return best time scaled to specified prefix
      */
     public double getMax(final Time.Prefix p_prefix) {
-        return m_value.getMaxValue() / Time.MS_PREFIX_TABLE[p_prefix.ordinal()];
+        return m_time.getBestTime(p_prefix);
     }
 
     /**
@@ -169,7 +169,7 @@ public class TimePercentile extends AbstractOperation {
      */
     public void record(final long p_valueNs) {
         m_percentile.record(p_valueNs);
-        m_value.add(p_valueNs);
+        m_time.add(p_valueNs);
     }
 
     /**
@@ -184,26 +184,24 @@ public class TimePercentile extends AbstractOperation {
         if (p_extended) {
             sortValues();
 
-            return m_value.dataToString(p_indent, p_extended) + ";95th percentile " +
-                    Time.formatTime(getPercentileScore(0.95f)) + ";99th percentile " +
-                    Time.formatTime(getPercentileScore(0.99f)) + ";99.9th percentile " +
-                    Time.formatTime(getPercentileScore(0.999f));
+            return m_time.dataToString(p_indent, p_extended) + ";95th percentile max" +
+                    Time.formatTime(getPercentileScore(0.95f)) + ";99th percentile max" +
+                    Time.formatTime(getPercentileScore(0.99f)) + ";99.9th percentile max" +
+                    Time.formatTime(getPercentileScore(0.999f)) + ";99.99th percentile max" +
+                    Time.formatTime(getPercentileScore(0.9999f));
         } else {
             // don't print percentile for debug output because sorting might take too long if there are too many values
-            return m_value.dataToString(p_indent, p_extended);
+            return m_time.dataToString(p_indent, p_extended);
         }
     }
 
     @Override
     public String generateCSVHeader(final char p_delim) {
-        return m_value.generateCSVHeader(p_delim) + p_delim + "95th percentile" + p_delim + "99th percentile" +
-                p_delim + "99.9th percentile";
+        return m_time.generateCSVHeader(p_delim) + p_delim + m_percentile.generateCSVHeader(p_delim);
     }
 
     @Override
     public String toCSV(final char p_delim) {
-        sortValues();
-        return m_value.toCSV(p_delim) + p_delim + getPercentileScore(0.95f) + p_delim + getPercentileScore(0.99f) +
-                p_delim + getPercentileScore(0.999f);
+        return m_time.toCSV(p_delim) + p_delim + m_percentile.toCSV(p_delim);
     }
 }
