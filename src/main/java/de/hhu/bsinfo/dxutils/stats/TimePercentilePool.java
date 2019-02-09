@@ -67,7 +67,7 @@ public class TimePercentilePool extends OperationPool {
         for (AbstractOperation[] opArr : m_pool) {
             for (AbstractOperation op : opArr) {
                 if (op != null) {
-                    val += ((TimePercentile) op).getTotalValue();
+                    val += ((TimePercentile) op).getTotalTime();
                 }
             }
         }
@@ -118,7 +118,7 @@ public class TimePercentilePool extends OperationPool {
         for (AbstractOperation[] opArr : m_pool) {
             for (AbstractOperation op : opArr) {
                 if (op != null) {
-                    long val = ((TimePercentile) op).getMin();
+                    long val = ((TimePercentile) op).getBestTime();
 
                     if (val < min) {
                         min = val;
@@ -152,7 +152,7 @@ public class TimePercentilePool extends OperationPool {
         for (AbstractOperation[] opArr : m_pool) {
             for (AbstractOperation op : opArr) {
                 if (op != null) {
-                    long val = ((TimePercentile) op).getMax();
+                    long val = ((TimePercentile) op).getWorstTime();
 
                     if (val > max) {
                         max = val;
