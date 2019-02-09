@@ -168,7 +168,7 @@ public class ValuePercentile extends AbstractOperation {
                 + getPercentileScore(0.99f) + p_delim
                 + getPercentileScore(0.99f, false) + p_delim
                 + getPercentileScore(0.999f) + p_delim
-                + getPercentileScore(0.999f, false)
+                + getPercentileScore(0.999f, false) + p_delim
                 + getPercentileScore(0.9999f) + p_delim
                 + getPercentileScore(0.9999f, false);
     }
