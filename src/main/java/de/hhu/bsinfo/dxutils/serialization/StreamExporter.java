@@ -19,6 +19,10 @@ public class StreamExporter implements Exporter {
         m_stream = new DataOutputStream(p_stream);
     }
 
+    public void flush() throws IOException {
+        m_stream.flush();
+    }
+
     @Override
     public void exportObject(final Exportable p_object) {
         p_object.exportObject(this);
