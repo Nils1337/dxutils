@@ -12,6 +12,10 @@ public class StreamImporter implements Importer {
         m_input = new DataInputStream(p_inputStream);
     }
 
+    public StreamImporter(DataInputStream p_inputStream) {
+        m_input = p_inputStream;
+    }
+
     @Override
     public void importObject(final Importable p_object) {
         p_object.importObject(this);
