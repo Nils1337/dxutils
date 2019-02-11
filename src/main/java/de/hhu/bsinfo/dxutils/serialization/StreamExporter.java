@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
-public class OutputStreamExporter implements Exporter {
+public class StreamExporter implements Exporter {
     private DataOutputStream m_stream;
 
     /**
@@ -15,7 +15,7 @@ public class OutputStreamExporter implements Exporter {
      * @param p_stream
      *         Output stream to write to
      */
-    public OutputStreamExporter(final OutputStream p_stream) {
+    public StreamExporter(final OutputStream p_stream) {
         m_stream = new DataOutputStream(p_stream);
     }
 
