@@ -56,6 +56,37 @@ public class TimePercentilePool extends OperationPool {
         return val;
     }
 
+    @Override
+    public String generateCSVHeader(char p_delim) {
+        return "name" + p_delim +
+                "pool size" + p_delim +
+                "counter" + p_delim +
+                "total" + p_delim +
+                "avg" + p_delim +
+                "min" + p_delim +
+                "max" + p_delim +
+                "95th percentile min" + p_delim +
+                "95th percentile max" + p_delim +
+                "99th percentile min" + p_delim +
+                "99th percentile max" + p_delim +
+                "99.9th percentile min" + p_delim +
+                "99.9th percentile max" + p_delim +
+                "99.99th percentile min" + p_delim +
+                "99.99th percentile max";
+    }
+
+    @Override
+    public String toCSV(char p_delim) {
+        return getOperationName()
+                + p_delim + getPoolSize() + p_delim + getCounter()
+                + p_delim + getTotalValue() + p_delim + getAvg()
+                + p_delim + getMin() + p_delim + getMax()
+                + p_delim + getPercentileScore(0.95f, false) + p_delim + getPercentileScore(0.95f, true)
+                + p_delim + getPercentileScore(0.99f, false) + p_delim + getPercentileScore(0.99f, true)
+                + p_delim + getPercentileScore(0.999f, false)+ p_delim + getPercentileScore(0.999f, true)
+                + p_delim + getPercentileScore(0.9999f, false) + p_delim + getPercentileScore(0.9999f, true);
+    }
+
     /**
      * Get the total value of all threads summed up
      *
@@ -226,7 +257,7 @@ public class TimePercentilePool extends OperationPool {
      *         the percentile
      * @return Score of specified percentile
      */
-    public long getPercentileScore(final float p_percentile) {
+    public long getPercentileScore(final float p_percentile, boolean p_max) {
         if (p_percentile <= 0.0 || p_percentile >= 1.0) {
             throw new IllegalArgumentException("Percentile must be in (0.0, 1.0)!");
         }
@@ -236,7 +267,12 @@ public class TimePercentilePool extends OperationPool {
         }
 
         int size = (m_slots.size() - 1) * SLOT_SIZE + m_index;
-        long index = (long) Math.ceil(p_percentile * size) - 1;
+        long index;
+        if (p_max) {
+            index = (long) Math.ceil(p_percentile * size) - 1;
+        } else {
+            index = (long) Math.floor((1 - p_percentile) * size);
+        }
 
         return m_slots.get((int) (index / SLOT_SIZE))[(int) (index % SLOT_SIZE)];
     }
@@ -250,8 +286,8 @@ public class TimePercentilePool extends OperationPool {
      *         Prefix to apply to score
      * @return Score of specified percentile scaled to specified prefix
      */
-    public double getPercentileScore(final float p_percentile, final Time.Prefix p_prefix) {
-        return getPercentileScore(p_percentile) / Time.MS_PREFIX_TABLE[p_prefix.ordinal()];
+    public double getPercentileScore(final float p_percentile, boolean p_max, final Time.Prefix p_prefix) {
+        return getPercentileScore(p_percentile, p_max) / Time.MS_PREFIX_TABLE[p_prefix.ordinal()];
     }
 
     /**

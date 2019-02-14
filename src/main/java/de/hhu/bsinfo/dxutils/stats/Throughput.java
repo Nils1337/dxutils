@@ -165,7 +165,7 @@ public class Throughput extends AbstractOperation {
     }
 
     /**
-     * Get the current throughput in prefix defined scale for value / prefixed defined scale for time
+     * Get the current throughput in prefix defined scale for value / prefixed defined dscale for time
      *
      * @param p_valuePrefix
      *         Prefix for value to use
@@ -174,6 +174,10 @@ public class Throughput extends AbstractOperation {
      */
     public double getThroughput(final Value.Prefix p_valuePrefix, final Time.Prefix p_timePrefix) {
         return m_value.getTotalValue(p_valuePrefix) / m_time.getTotalTime(p_timePrefix);
+    }
+
+    public long getCounter() {
+        return m_time.getCounter();
     }
 
     @Override

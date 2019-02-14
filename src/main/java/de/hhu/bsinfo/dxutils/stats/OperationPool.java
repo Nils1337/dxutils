@@ -83,6 +83,20 @@ public class OperationPool extends AbstractOperation {
         return builder.toString();
     }
 
+    public int getPoolSize() {
+        int val = 0;
+
+        for (AbstractOperation[] opArr : m_pool) {
+            for (AbstractOperation op : opArr) {
+                if (op != null) {
+                    val++;
+                }
+            }
+        }
+
+        return val;
+    }
+
     /**
      * Get the TimePercentile object for the current thread
      */
