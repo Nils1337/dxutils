@@ -16,23 +16,12 @@
 
 package de.hhu.bsinfo.dxutils.stats;
 
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 /**
  * (Thread safe) throughput operation using a pool with per thread local throughput operations
  *
  * @author Stefan Nothaas, stefan.nothaas@hhu.de, 05.03.2018
  */
 public class ThroughputPool extends OperationPool {
-    private static final int MS_BLOCK_SIZE_POOL = 100;
-
-    private final Value.Base m_base;
-    private ArrayList<Throughput[]> m_pool = new ArrayList<>();
-    private Lock m_poolLock = new ReentrantLock(false);
-    private AtomicInteger m_numberEntries = new AtomicInteger(0);
 
     /**
      * Constructor
@@ -41,13 +30,9 @@ public class ThroughputPool extends OperationPool {
      *         Class that contains the operation
      * @param p_name
      *         Name for the operation
-     * @param p_base
-     *         Base for the value
      */
-    public ThroughputPool(final Class<?> p_class, final String p_name, final Value.Base p_base) {
+    public ThroughputPool(final Class<?> p_class, final String p_name) {
         super(Throughput.class, p_class, p_name);
-
-        m_base = p_base;
     }
 
     /**

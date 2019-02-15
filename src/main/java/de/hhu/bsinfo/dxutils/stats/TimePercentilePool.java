@@ -77,6 +77,8 @@ public class TimePercentilePool extends OperationPool {
 
     @Override
     public String toCSV(char p_delim) {
+        sortValues();
+
         return getOperationName()
                 + p_delim + getPoolSize() + p_delim + getCounter()
                 + p_delim + getTotalValue() + p_delim + getAvg()
