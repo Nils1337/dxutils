@@ -37,6 +37,21 @@ public class Throughput extends AbstractOperation {
      *         Class that contains the operation
      * @param p_name
      *         Name for the operation
+     */
+    public Throughput(final Class<?> p_class, final String p_name) {
+        super(p_class, p_name);
+
+        m_value = new Value(p_class, p_name, Value.Base.B_10);
+        m_time = new Time(p_class, p_name);
+    }
+
+    /**
+     * Constructor
+     *
+     * @param p_class
+     *         Class that contains the operation
+     * @param p_name
+     *         Name for the operation
      * @param p_base
      *         Base for the value
      */
