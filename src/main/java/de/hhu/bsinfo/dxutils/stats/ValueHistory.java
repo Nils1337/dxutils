@@ -5,8 +5,18 @@ import java.util.ArrayList;
 public class ValueHistory extends AbstractOperation  {
     private static final int SLOT_SIZE = 100000;
 
-    private ArrayList<long[]> m_slots = new ArrayList<>();
+    private ArrayList<Data[]> m_slots = new ArrayList<>();
     private int m_index;
+
+    private static class Data {
+        public Data(long p_timestamp, long p_value) {
+            m_timestamp = p_timestamp;
+            m_value = p_value;
+        }
+
+        long m_timestamp;
+        long m_value;
+    }
 
     /**
      * Constructor
@@ -28,18 +38,18 @@ public class ValueHistory extends AbstractOperation  {
      * @param p_value
      *         Value to record
      */
-    public synchronized void record(final long p_value) {
-        long[] arr;
+    public synchronized void record(final long p_timestamp, final long p_value) {
+        Data[] arr;
 
         if (m_index % SLOT_SIZE == 0) {
-            arr = new long[SLOT_SIZE];
+            arr = new Data[SLOT_SIZE];
             m_slots.add(arr);
             m_index = 0;
         } else {
             arr = m_slots.get(m_slots.size() - 1);
         }
 
-        arr[m_index++] = p_value;
+        arr[m_index++] = new Data(p_timestamp, p_value);
     }
 
     @Override
@@ -49,7 +59,7 @@ public class ValueHistory extends AbstractOperation  {
 
     @Override
     public String generateCSVHeader(char p_delim) {
-        return "number" + p_delim + "value";
+        return "timestamp" + p_delim + "value";
     }
 
     @Override
@@ -57,19 +67,19 @@ public class ValueHistory extends AbstractOperation  {
         StringBuilder builder = new StringBuilder();
 
         int i = 0;
-        for (long[] arr : m_slots) {
+        for (Data[] arr : m_slots) {
             if (arr == m_slots.get(m_slots.size() - 1)) {
                 for (int j = 0; j < m_index; j++) {
-                    builder.append(i++);
+                    builder.append(arr[j].m_timestamp);
                     builder.append(p_delim);
-                    builder.append(arr[j]);
+                    builder.append(arr[j].m_value);
                     builder.append('\n');
                 }
             } else {
                 for (int j = 0; j < arr.length; j++) {
-                    builder.append(i++);
+                    builder.append(arr[j].m_timestamp);
                     builder.append(p_delim);
-                    builder.append(arr[j]);
+                    builder.append(arr[j].m_value);
                     builder.append('\n');
                 }
             }
