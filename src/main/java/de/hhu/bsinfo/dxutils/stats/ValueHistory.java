@@ -28,7 +28,7 @@ public class ValueHistory extends AbstractOperation  {
      * @param p_value
      *         Value to record
      */
-    public void record(final long p_value) {
+    public synchronized void record(final long p_value) {
         long[] arr;
 
         if (m_index % SLOT_SIZE == 0) {
